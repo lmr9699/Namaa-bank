@@ -21,13 +21,11 @@ export default function Index() {
     mutationKey: ["sign in"],
     mutationFn: () => login({ username: form.username, password: form.password }),
     onSuccess: async (data) => {
-      console.log("success:", data)
       await setToken(data.data.token)
       router.push("/(tabs)/(home)/home");
       setIsAuthinticated(true)
     },
-    onError: (error) => {
-      console.log("Login error:", error)
+    onError: () => {
       Alert.alert('Error', 'Login failed. Please check your credentials.')
     },
   });
@@ -84,10 +82,7 @@ export default function Index() {
           </View>
 
           <View style={styles.formAction}>
-            <TouchableOpacity onPress={() => {
-              handleSingIn()
-              console.log(handleSingIn)
-            }} >
+            <TouchableOpacity onPress={handleSingIn} >
               <Text style={styles.btn}>Sign In</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {

@@ -5,13 +5,16 @@ const getAllAmount = async () => {
   return data;
 };
 
-const getAmount = async (amountId: string) => {
-  const { data } = await instance.get(`api/transactions/${amountId}`);
+const getAmount = async (amount: string) => {
+  const { data } = await instance.get(`api/transactions/my${amount}`);
   return data;
 };
 
-const createAmount = async (amountInfo: string) => {
-  const { data } = await instance.post("api/transactions", amountInfo);
+const sendAmount = async (amount: string, toUserId: string) => {
+  const { data } = await instance.post("api/transactions/transfer", {
+    amount: amount,
+    toUserId: toUserId,
+  });
   return data;
 };
 
@@ -23,4 +26,4 @@ const updateAmount = async (amountInfo: any) => {
   return data;
 };
 
-export { createAmount, getAllAmount, getAmount, updateAmount };
+export { getAllAmount, getAmount, sendAmount, updateAmount };

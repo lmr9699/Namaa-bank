@@ -29,15 +29,13 @@ const Register = () => {
         mutationKey: ["register"],
         mutationFn: () => register({ username, password, image })
         ,
-        onSuccess: async (data) => {
-            console.log(data)
+        onSuccess: async () => {
             const loginData = await login({ username, password })
             await setToken(loginData.data.token)
             router.push("/(tabs)/(home)/home");
             setIsAuthinticated(true)
         },
         onError: (err: any) => {
-            console.log("Register error:", err.response?.data || err.message)
             Alert.alert('Error', err.response?.data?.message || 'Registration failed')
         }
     })
@@ -57,8 +55,6 @@ const Register = () => {
             quality: 0,
         });
 
-        console.log(result);
-
         if (!result.canceled) {
             setImage(result.assets[0].uri);
         }
@@ -73,7 +69,6 @@ const Register = () => {
             Alert.alert('Error', 'Password must be at least 6 characters')
             return
         }
-        console.log(username, password);
         mutate()
     };
 

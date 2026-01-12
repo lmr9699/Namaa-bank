@@ -6,7 +6,7 @@ const setToken = async (token: string) => {
 
 const getToken = async () => {
   const token = await SecureStore.getItemAsync("token");
-  console.log(getToken);
+  console.log("Token:", token);
   return token;
 };
 

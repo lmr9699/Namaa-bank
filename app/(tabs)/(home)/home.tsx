@@ -2,6 +2,7 @@ import { me, transactions } from "@/api/Auth";
 import colors from "@/data/styling/color";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
+import { router } from "expo-router";
 import React from "react";
 import {
     ActivityIndicator,
@@ -32,6 +33,31 @@ const HomePage = () => {
     }
     const userData = user?.data;
     const transactionList = transactionsData?.data || [];
+
+    // const renderTransaction = ({ item }: { item: any }) => (
+    //     <View style={styles.transactionItem}>
+    //         <View style={[styles.iconContainer, {
+    //             backgroundColor: item.type === 'DEPOSIT' ? '#e8f5e9' : '#fde8e8'
+    //         }]}>
+    //             <Feather
+    //                 name={item.type === 'DEPOSIT' ? "arrow-down-left" : "arrow-up-right"}
+    //                 size={24}
+    //                 color={item.type === 'DEPOSIT' ? "#2e7d32" : "#e74c3c"}
+    //             />
+    //         </View>
+    //         <View style={styles.details}>
+    //             <Text style={styles.type}>{item.type || "Transaction"}</Text>
+    //             <Text style={styles.date}>
+    //                 {new Date(item.createdAt).toLocaleDateString()}
+    //             </Text>
+    //         </View>
+    //         <Text style={[styles.amount, {
+    //             color: item.type === 'DEPOSIT' ? '#2e7d32' : '#e74c3c'
+    //         }]}>
+    //             {item.type === 'DEPOSIT' ? '+' : '-'}${item.amount?.toFixed(2)}
+    //         </Text>
+    //     </View>
+    // );
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -39,13 +65,13 @@ const HomePage = () => {
                 <View style={styles.welcomeSection} >
 
                     <Text style={styles.welcomeText}>Welcome back,</Text>
-                    <Text style={styles.userName}>{user?.name || "User"}</Text>
+                    <Text style={styles.userName}>{userData?.username || "User"}</Text>
                 </View>
 
                 {/* Balance Card */}
                 <View style={styles.balanceCard}>
                     <Text style={styles.balanceLabel}>Total Balance</Text>
-                    <Text style={styles.balanceAmount}>$12,450.00</Text>
+                    <Text style={styles.balanceAmount}>{userData?.balance}</Text>
                     <View style={styles.cardDetails}>
                         <Text style={styles.cardNumber}>**** **** **** 4582</Text>
                     </View>
@@ -53,25 +79,30 @@ const HomePage = () => {
 
                 {/* Quick Actions */}
                 <View style={styles.actionsContainer}>
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity style={styles.actionButton}
+                        //onPress handle transaction page
+                        onPress={() => {
+                            router.push("/(tabs)/(home)/(transfer)")
+                        }}
+                    >
                         <View style={styles.actionIcon}>
                             <Feather name="send" size={24} color={colors.primary} />
                         </View>
-                        <Text style={styles.actionText}>Send</Text>
+                        <Text style={styles.actionText}>Transfer</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton}>
                         <View style={styles.actionIcon}>
                             <Feather name="download" size={24} color={colors.primary} />
                         </View>
-                        <Text style={styles.actionText}>Receive</Text>
+                        <Text style={styles.actionText}>Withdraw</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton}>
                         <View style={styles.actionIcon}>
                             <MaterialCommunityIcons name="qrcode-scan" size={24} color={colors.primary} />
                         </View>
-                        <Text style={styles.actionText}>Pay</Text>
+                        <Text style={styles.actionText}>Deposit</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton}>
@@ -86,10 +117,10 @@ const HomePage = () => {
                 <View style={styles.transactionsSection}>
                     <Text style={styles.sectionTitle}>Recent Transactions</Text>
 
-                    {transactions?.length === 0 ? (
+                    {transactionList?.length === 0 ? (
                         <Text style={styles.noTransactions}>No transactions yet</Text>
                     ) : (
-                        transactionList?.map((item: any, index: number) => (
+                        transactionList?.slice(0, 5).map((item: any, index: number) => (
                             <View key={index} style={styles.transactionItem}>
                                 <View style={styles.transactionIcon}>
                                     <Feather name="arrow-up-right" size={20} color="#e74c3c" />
