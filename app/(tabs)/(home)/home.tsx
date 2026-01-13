@@ -92,7 +92,7 @@ const HomePage = () => {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton}
-                        onPress={() => { router.push("/(tabs)/(withdraw)") }}
+                        onPress={() => { router.push("/(tabs)/(home)/(withdraw)") }}
                     >
                         <View style={styles.actionIcon}>
                             <Feather name="download" size={24} color={colors.primary} />
@@ -100,7 +100,10 @@ const HomePage = () => {
                         <Text style={styles.actionText}>Withdraw</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => router.push("/(tabs)/(home)/(deposit)")}
+                    >
                         <View style={styles.actionIcon}>
                             <MaterialCommunityIcons name="qrcode-scan" size={24} color={colors.primary} />
                         </View>

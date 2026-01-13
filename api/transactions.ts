@@ -5,7 +5,7 @@ const getAllAmount = async () => {
   return data;
 };
 
-const getAmount = async (amount: string) => {
+const getMyAmount = async (amount: string) => {
   const { data } = await instance.get(`api/transactions/my${amount}`);
   return data;
 };
@@ -20,9 +20,16 @@ const sendAmount = async (amount: string, toUserId: string) => {
 
 const withdrawAmount = async (amountInfo: any) => {
   const { data } = await instance.post(
-    `api/transactins/withdraw${amountInfo._id}`,
+    `api/transactions/withdraw${amountInfo._id}`,
     amountInfo
   );
+  return data;
+};
+
+const depositAmount = async (amount: number) => {
+  const { data } = await instance.post("api/transactions/deposit", {
+    amount: amount,
+  });
   return data;
 };
 
@@ -34,4 +41,11 @@ const updateAmount = async (amountInfo: any) => {
   return data;
 };
 
-export { getAllAmount, getAmount, sendAmount, updateAmount, withdrawAmount };
+export {
+  depositAmount,
+  getAllAmount,
+  getMyAmount,
+  sendAmount,
+  updateAmount,
+  withdrawAmount,
+};

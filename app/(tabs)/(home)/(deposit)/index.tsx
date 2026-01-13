@@ -1,5 +1,5 @@
 import { me } from "@/api/Auth";
-import { withdrawAmount } from "@/api/transactions";
+import { depositAmount } from "@/api/transactions";
 import colors from "@/data/styling/color";
 import { Feather } from "@expo/vector-icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +17,7 @@ import {
     View,
 } from "react-native";
 
-const WithdrawPage = () => {
+const DepositPage = () => {
     const [amount, setAmount] = useState("");
     const queryClient = useQueryClient();
 
@@ -27,9 +27,9 @@ const WithdrawPage = () => {
     });
 
     const { mutate, isPending } = useMutation({
-        mutationFn: () => withdrawAmount(parseFloat(amount)),
+        mutationFn: () => depositAmount(parseFloat(amount)),
         onSuccess: () => {
-            Alert.alert("Success", "Withdrawal completed!", [
+            Alert.alert("Success", "Deposit completed!", [
                 { text: "OK", onPress: () => router.back() }
             ]);
             setAmount("");
@@ -37,22 +37,18 @@ const WithdrawPage = () => {
             queryClient.invalidateQueries({ queryKey: ["transactions"] });
         },
         onError: (error: any) => {
-            Alert.alert("Error", error.response?.data?.message || "Withdrawal failed");
+            Alert.alert("Error", error.response?.data?.message || "Deposit failed");
         },
     });
 
-    const handleWithdraw = () => {
+    const handleDeposit = () => {
         if (!amount || parseFloat(amount) <= 0) {
             Alert.alert("Error", "Please enter a valid amount");
             return;
         }
-        if (parseFloat(amount) > (currentUser?.data?.balance || 0)) {
-            Alert.alert("Error", "Insufficient balance");
-            return;
-        }
         Alert.alert(
-            "Confirm Withdrawal",
-            `Withdraw $${amount} from your account?`,
+            "Confirm Deposit",
+            `Deposit $${amount} to your account?`,
             [
                 { text: "Cancel", style: "cancel" },
                 { text: "Confirm", onPress: () => mutate() },
@@ -77,7 +73,7 @@ const WithdrawPage = () => {
         >
             {/* Balance Card */}
             <View style={styles.balanceCard}>
-                <Text style={styles.balanceLabel}>Available Balance</Text>
+                <Text style={styles.balanceLabel}>Current Balance</Text>
                 <Text style={styles.balanceAmount}>
                     ${currentUser?.data?.balance?.toFixed(2) || "0.00"}
                 </Text>
@@ -85,7 +81,7 @@ const WithdrawPage = () => {
 
             {/* Amount Input */}
             <View style={styles.inputContainer}>
-                <Text style={styles.label}>Withdrawal Amount</Text>
+                <Text style={styles.label}>Deposit Amount</Text>
                 <View style={styles.inputWrapper}>
                     <Text style={styles.currencySymbol}>$</Text>
                     <TextInput
@@ -127,22 +123,22 @@ const WithdrawPage = () => {
             <View style={styles.infoBox}>
                 <Feather name="info" size={20} color={colors.primary} />
                 <Text style={styles.infoText}>
-                    Withdrawals are processed instantly to your linked account.
+                    Deposits are credited instantly to your account.
                 </Text>
             </View>
 
-            {/* Withdraw Button */}
+            {/* Deposit Button */}
             <TouchableOpacity
-                style={[styles.withdrawButton, isPending && styles.buttonDisabled]}
-                onPress={handleWithdraw}
+                style={[styles.depositButton, isPending && styles.buttonDisabled]}
+                onPress={handleDeposit}
                 disabled={isPending}
             >
                 {isPending ? (
                     <ActivityIndicator color="#fff" />
                 ) : (
                     <>
-                        <Feather name="download" size={20} color="#fff" style={styles.buttonIcon} />
-                        <Text style={styles.withdrawButtonText}>Withdraw</Text>
+                        <Feather name="plus-circle" size={20} color="#fff" style={styles.buttonIcon} />
+                        <Text style={styles.depositButtonText}>Deposit</Text>
                     </>
                 )}
             </TouchableOpacity>
@@ -150,7 +146,7 @@ const WithdrawPage = () => {
     );
 };
 
-export default WithdrawPage;
+export default DepositPage;
 
 const styles = StyleSheet.create({
     container: {
@@ -244,7 +240,7 @@ const styles = StyleSheet.create({
     infoBox: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#e8f5e9",
+        backgroundColor: "#e3f2fd",
         padding: 15,
         borderRadius: 10,
         marginBottom: 20,
@@ -255,7 +251,7 @@ const styles = StyleSheet.create({
         color: "#333",
         fontSize: 14,
     },
-    withdrawButton: {
+    depositButton: {
         backgroundColor: colors.primary,
         padding: 18,
         borderRadius: 12,
@@ -270,7 +266,7 @@ const styles = StyleSheet.create({
     buttonIcon: {
         marginRight: 8,
     },
-    withdrawButtonText: {
+    depositButtonText: {
         color: "#fff",
         fontSize: 18,
         fontWeight: "bold",

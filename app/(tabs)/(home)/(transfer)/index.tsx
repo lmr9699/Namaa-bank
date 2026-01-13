@@ -34,7 +34,7 @@ const TransferPage = () => {
     });
 
     const { mutate, isPending } = useMutation({
-        mutationFn: () => sendAmount(selectedUser.id, amount),
+        mutationFn: () => sendAmount(amount, selectedUser.id),
         onSuccess: (data) => {
             Alert.alert("Success", "Transfer completed!");
             setSelectedUser(null);
