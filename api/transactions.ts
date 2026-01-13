@@ -18,12 +18,20 @@ const sendAmount = async (amount: string, toUserId: string) => {
   return data;
 };
 
-const updateAmount = async (amountInfo: any) => {
-  const { data } = await instance.put(
-    `api/transactions/${amountInfo._id}`,
+const withdrawAmount = async (amountInfo: any) => {
+  const { data } = await instance.post(
+    `api/transactins/withdraw${amountInfo._id}`,
     amountInfo
   );
   return data;
 };
 
-export { getAllAmount, getAmount, sendAmount, updateAmount };
+const updateAmount = async (amountInfo: any) => {
+  const { data } = await instance.put(
+    `api/transactions/my${amountInfo._id}`,
+    amountInfo
+  );
+  return data;
+};
+
+export { getAllAmount, getAmount, sendAmount, updateAmount, withdrawAmount };

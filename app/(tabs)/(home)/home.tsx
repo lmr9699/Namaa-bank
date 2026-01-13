@@ -91,7 +91,9 @@ const HomePage = () => {
                         <Text style={styles.actionText}>Transfer</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity style={styles.actionButton}
+                        onPress={() => { router.push("/(tabs)/(withdraw)") }}
+                    >
                         <View style={styles.actionIcon}>
                             <Feather name="download" size={24} color={colors.primary} />
                         </View>
